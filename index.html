@@ -245,19 +245,22 @@ async function loadFromGitHub() {
   statusEl.className = "status-bar";
   statusEl.textContent = "⏳ Carregando dados atualizados...";
   try {
-    const resp = await fetch(GITHUB_URL + "?t=" + Date.now());
-    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const url = GITHUB_URL + "?t=" + Date.now();
+    statusEl.textContent = "⏳ Buscando: " + url;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error("Servidor retornou HTTP " + resp.status + " para " + url);
     const buf  = await resp.arrayBuffer();
+    if (buf.byteLength < 1000) throw new Error("Arquivo muito pequeno (" + buf.byteLength + " bytes) — pode estar vazio ou corrompido");
     const wb   = XLSX.read(new Uint8Array(buf), {type:"array", cellDates:false});
     const d    = parseWorkbook(wb);
     renderAll(d);
     const now  = new Date().toLocaleString("pt-BR");
     statusEl.className = "status-bar ok";
-    statusEl.textContent = "✅ Dados atualizados automaticamente — " + now;
+    statusEl.textContent = "✅ Dados atualizados — " + now + " (" + (buf.byteLength/1024).toFixed(0) + " KB)";
     document.getElementById("btnDownload").style.display = "block";
   } catch(e) {
-    statusEl.className = "status-bar";
-    statusEl.textContent = "⚠️ Usando dados salvos (sem conexão com GitHub)";
+    statusEl.className = "status-bar err";
+    statusEl.textContent = "❌ Erro: " + e.message;
     renderAll(INIT);
   }
 }
