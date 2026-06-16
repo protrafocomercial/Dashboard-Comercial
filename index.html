@@ -111,12 +111,6 @@ canvas { width: 100% !important; }
 
 
 
-/* SPEEDOMETER */
-.gauge-row { display:flex; align-items:center; justify-content:center; gap:32px; background:#1a1f2e; border:1px solid #2d3748; border-radius:12px; padding:14px 28px; margin-bottom:18px; flex-wrap:wrap; }
-.gauge-block { display:flex; flex-direction:column; align-items:center; gap:4px; }
-.gauge-title { font-size:0.68rem; color:#718096; text-transform:uppercase; letter-spacing:.7px; }
-.gauge-label { font-size:0.72rem; color:#a0aec0; margin-top:2px; text-align:center; }
-
 /* PROGRESS BAR */
 .progress-wrap { margin-top: 8px; background: #2d3748; border-radius: 4px; height: 6px; overflow: hidden; }
 .progress-bar  { height: 6px; border-radius: 4px; transition: width .6s ease; }
@@ -184,23 +178,17 @@ footer { text-align: center; color: #2d3748; font-size: 0.65rem; padding: 16px; 
       <div class="kpi-value" id="kpiConv">—</div>
       <div class="kpi-sub" id="kpiConvSub">—</div>
     </div>
-  </div>
-
-
-  <!-- VELOCÍMETROS META -->
-  <div class="gauge-row">
-    <div class="gauge-block">
-      <span class="gauge-title">⚡ Meta Anual — R$ 24M</span>
-      <canvas id="gaugeAnual" width="200" height="110"></canvas>
-      <span class="gauge-label" id="gaugeAnualLabel">—</span>
+    <div class="kpi" style="align-items:center;justify-content:center;text-align:center;padding:12px 8px;">
+      <div class="kpi-label" style="margin-bottom:2px;">⚡ Meta Anual — R$ 24M</div>
+      <canvas id="gaugeAnual" width="170" height="96" style="max-width:100%;display:block;margin:0 auto;"></canvas>
+      <div id="gaugeAnualLabel" style="font-size:0.68rem;color:#a0aec0;margin-top:2px;">—</div>
     </div>
-    <div class="gauge-block">
-      <span class="gauge-title">📅 Meta Mensal — R$ 2M</span>
-      <canvas id="gaugeMensal" width="200" height="110"></canvas>
-      <span class="gauge-label" id="gaugeMensalLabel">—</span>
+    <div class="kpi" style="align-items:center;justify-content:center;text-align:center;padding:12px 8px;">
+      <div class="kpi-label" style="margin-bottom:2px;">📅 Meta Mensal — R$ 2M</div>
+      <canvas id="gaugeMensal" width="170" height="96" style="max-width:100%;display:block;margin:0 auto;"></canvas>
+      <div id="gaugeMensalLabel" style="font-size:0.68rem;color:#a0aec0;margin-top:2px;">—</div>
     </div>
   </div>
-
   <!-- CHARTS ROW 1 -->
   <div class="charts-top">
     <div class="card">
