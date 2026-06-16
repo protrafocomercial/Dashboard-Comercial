@@ -172,11 +172,18 @@ footer { text-align: center; color: #2d3748; font-size: 0.65rem; padding: 16px; 
       <div class="kpi-value" id="kpiTicket">—</div>
       <div class="kpi-sub">Propostas aprovadas</div>
     </div>
-    <div class="kpi navy">
-      <div class="kpi-icon">📈</div>
-      <div class="kpi-label">Taxa de Conversão</div>
-      <div class="kpi-value" id="kpiConv">—</div>
-      <div class="kpi-sub" id="kpiConvSub">—</div>
+    <div class="kpi navy" style="display:flex;flex-direction:column;justify-content:space-between;gap:8px;">
+      <div>
+        <div class="kpi-icon">📈</div>
+        <div class="kpi-label">Taxa de Conversão</div>
+        <div class="kpi-value" id="kpiConv">—</div>
+        <div class="kpi-sub" id="kpiConvSub">—</div>
+      </div>
+      <div style="border-top:1px solid #2d3748;padding-top:10px;">
+        <div class="kpi-label" style="color:#c84b50;">🎯 Projeção Anual</div>
+        <div style="font-size:1.2rem;font-weight:800;color:#f08a8d;line-height:1.2;" id="kpiProjecao">—</div>
+        <div class="kpi-sub" id="kpiProjecaoSub">base: ritmo atual</div>
+      </div>
     </div>
     <div class="kpi" style="align-items:center;justify-content:center;text-align:center;padding:12px 8px;">
       <div class="kpi-label" style="margin-bottom:2px;">⚡ Meta Anual — R$ 24M</div>
@@ -389,8 +396,16 @@ let charts = {};
 function drawGauge(canvasId, pct, label, labelId) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const logW = parseInt(canvas.getAttribute('width'));
+  const logH = parseInt(canvas.getAttribute('height'));
+  canvas.width  = logW * dpr;
+  canvas.height = logH * dpr;
+  canvas.style.width  = logW + 'px';
+  canvas.style.height = logH + 'px';
   const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
+  ctx.scale(dpr, dpr);
+  const W = logW, H = logH;
   ctx.clearRect(0, 0, W, H);
 
   const cx = W / 2, cy = H - 14;
@@ -487,6 +502,14 @@ function renderAll(d) {
   setText("kpiTicket",   d.countAprov>0 ? fmt(d.totalAprov/d.countAprov) : "—");
   setText("kpiConv",     conv+"%");
   setText("kpiConvSub",  d.countAprov+" de "+d.totalProps+" propostas");
+
+  // Projeção anual baseada no ritmo dos meses com dados
+  const mesesComDados = Object.keys(d.monthly).filter(k=>d.monthly[k]>0).length || 1;
+  const mediaMensal = d.totalAprov / mesesComDados;
+  const projecao = mediaMensal * 12;
+  const pctProjecao = (projecao / META_ANUAL) * 100;
+  setText("kpiProjecao", fmt(projecao));
+  setText("kpiProjecaoSub", "Média " + fmt(mediaMensal) + "/mês × 12");
 
   // Meta KPIs
   const pctAnual = Math.min(100, (d.totalAprov / META_ANUAL)*100);
