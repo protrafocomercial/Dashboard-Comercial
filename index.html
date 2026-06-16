@@ -187,12 +187,12 @@ footer { text-align: center; color: #2d3748; font-size: 0.65rem; padding: 16px; 
     </div>
     <div class="kpi" style="align-items:center;justify-content:center;text-align:center;padding:12px 8px;">
       <div class="kpi-label" style="margin-bottom:2px;">⚡ Meta Anual — R$ 24M</div>
-      <canvas id="gaugeAnual" width="170" height="96" style="max-width:100%;display:block;margin:0 auto;"></canvas>
+      <canvas id="gaugeAnual" style="width:100%;height:auto;display:block;margin:0 auto;max-height:130px;"></canvas>
       <div id="gaugeAnualLabel" style="font-size:0.68rem;color:#a0aec0;margin-top:2px;">—</div>
     </div>
     <div class="kpi" style="align-items:center;justify-content:center;text-align:center;padding:12px 8px;">
       <div class="kpi-label" style="margin-bottom:2px;">📅 Meta Mensal — R$ 2M</div>
-      <canvas id="gaugeMensal" width="170" height="96" style="max-width:100%;display:block;margin:0 auto;"></canvas>
+      <canvas id="gaugeMensal" style="width:100%;height:auto;display:block;margin:0 auto;max-height:130px;"></canvas>
       <div id="gaugeMensalLabel" style="font-size:0.68rem;color:#a0aec0;margin-top:2px;">—</div>
     </div>
   </div>
@@ -396,92 +396,94 @@ let charts = {};
 function drawGauge(canvasId, pct, label, labelId) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
-  const dpr = window.devicePixelRatio || 1;
-  const logW = parseInt(canvas.getAttribute('width'));
-  const logH = parseInt(canvas.getAttribute('height'));
-  canvas.width  = logW * dpr;
-  canvas.height = logH * dpr;
-  canvas.style.width  = logW + 'px';
-  canvas.style.height = logH + 'px';
+
+  // Always draw at high internal resolution for sharpness
+  const DW = 480, DH = 260;
+  canvas.width  = DW;
+  canvas.height = DH;
+
   const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-  const W = logW, H = logH;
-  ctx.clearRect(0, 0, W, H);
+  const p   = Math.min(Math.max(pct, 0), 1);
+  const cx  = DW / 2, cy = DH - 28;
+  const r   = DH * 0.72;
 
-  const cx = W / 2, cy = H - 14;
-  const r = Math.min(W, H * 2) * 0.42;
-  const startA = Math.PI, endA = 2 * Math.PI;
-  const p = Math.min(Math.max(pct, 0), 1);
-
-  // Background arc
+  // Background track
   ctx.beginPath();
-  ctx.arc(cx, cy, r, startA, endA);
-  ctx.lineWidth = 18;
-  ctx.strokeStyle = '#2d3748';
+  ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
+  ctx.lineWidth = 32;
+  ctx.strokeStyle = '#1e2536';
   ctx.lineCap = 'round';
   ctx.stroke();
 
-  // Zone arcs: red 0-50%, orange 50-75%, green 75-100%
+  // Colour zones (red / orange / green)
   const zones = [
-    { from: 0,    to: 0.5,  color: '#c84b50' },
-    { from: 0.5,  to: 0.75, color: '#f59e0b' },
-    { from: 0.75, to: 1.0,  color: '#10b981' }
+    { from:0,    to:0.50, color:'#c84b50' },
+    { from:0.50, to:0.75, color:'#f59e0b' },
+    { from:0.75, to:1.00, color:'#10b981' }
   ];
   zones.forEach(z => {
     ctx.beginPath();
-    ctx.arc(cx, cy, r, startA + z.from * Math.PI, startA + z.to * Math.PI);
-    ctx.lineWidth = 18;
-    ctx.strokeStyle = z.color + '55';
+    ctx.arc(cx, cy, r, Math.PI + z.from * Math.PI, Math.PI + z.to * Math.PI);
+    ctx.lineWidth = 32;
+    ctx.strokeStyle = z.color + '44';
     ctx.stroke();
   });
 
-  // Filled progress arc
-  const fillColor = p >= 1 ? '#10b981' : p >= 0.75 ? '#10b981' : p >= 0.5 ? '#f59e0b' : '#c84b50';
+  // Progress arc
+  const fillColor = p >= 0.75 ? '#10b981' : p >= 0.50 ? '#f59e0b' : '#c84b50';
   ctx.beginPath();
-  ctx.arc(cx, cy, r, startA, startA + p * Math.PI);
-  ctx.lineWidth = 18;
+  ctx.arc(cx, cy, r, Math.PI, Math.PI + p * Math.PI);
+  ctx.lineWidth = 32;
   ctx.strokeStyle = fillColor;
   ctx.lineCap = 'round';
   ctx.stroke();
 
   // Tick marks
   for (let i = 0; i <= 10; i++) {
-    const a = startA + (i / 10) * Math.PI;
-    const inner = r - 13, outer = r + 5;
+    const a    = Math.PI + (i / 10) * Math.PI;
+    const big  = i % 5 === 0;
+    const iLen = r - (big ? 28 : 20);
+    const oLen = r + (big ? 8  : 4);
     ctx.beginPath();
-    ctx.moveTo(cx + inner * Math.cos(a), cy + inner * Math.sin(a));
-    ctx.lineTo(cx + outer * Math.cos(a), cy + outer * Math.sin(a));
-    ctx.lineWidth = i % 5 === 0 ? 2.5 : 1;
+    ctx.moveTo(cx + iLen * Math.cos(a), cy + iLen * Math.sin(a));
+    ctx.lineTo(cx + oLen * Math.cos(a), cy + oLen * Math.sin(a));
+    ctx.lineWidth  = big ? 3 : 1.5;
     ctx.strokeStyle = '#4a5568';
     ctx.stroke();
   }
 
-  // Needle
-  const needleAngle = startA + p * Math.PI;
-  const nLen = r - 10;
+  // Needle shadow
+  const nAngle = Math.PI + p * Math.PI;
+  const nLen   = r - 16;
   ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.5)';
-  ctx.shadowBlur = 4;
+  ctx.shadowColor = 'rgba(0,0,0,0.7)';
+  ctx.shadowBlur  = 10;
   ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(cx + nLen * Math.cos(needleAngle), cy + nLen * Math.sin(needleAngle));
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 2.5;
-  ctx.lineCap = 'round';
+  ctx.moveTo(cx - 10 * Math.cos(nAngle - Math.PI / 2),
+             cy - 10 * Math.sin(nAngle - Math.PI / 2));
+  ctx.lineTo(cx + nLen * Math.cos(nAngle),
+             cy + nLen * Math.sin(nAngle));
+  ctx.lineWidth   = 4;
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineCap     = 'round';
   ctx.stroke();
   ctx.restore();
 
-  // Center dot
+  // Centre dot
   ctx.beginPath();
-  ctx.arc(cx, cy, 6, 0, 2 * Math.PI);
+  ctx.arc(cx, cy, 12, 0, 2 * Math.PI);
   ctx.fillStyle = '#e2e8f0';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 5, 0, 2 * Math.PI);
+  ctx.fillStyle = '#32384b';
   ctx.fill();
 
   // Percentage text
-  ctx.font = 'bold 18px Segoe UI, sans-serif';
-  ctx.fillStyle = '#fff';
+  ctx.font      = 'bold 56px Segoe UI, system-ui, sans-serif';
+  ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'center';
-  ctx.fillText((p * 100).toFixed(1) + '%', cx, cy - r * 0.28);
+  ctx.fillText((p * 100).toFixed(1) + '%', cx, cy - r * 0.22);
 
   if (labelId) setText(labelId, label);
 }
