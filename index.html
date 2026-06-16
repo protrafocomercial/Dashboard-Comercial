@@ -520,21 +520,6 @@ function renderAll(d) {
     });
   }
 
-  // Annual gauge
-  const pctAnualGauge = d.totalAprov / META_ANUAL;
-  charts.gauge = makeGauge('chartGauge', pctAnualGauge, 'gaugePct', 'gaugeSub');
-  setText('gaugePct', (pctAnualGauge*100).toFixed(1)+'%');
-  setText('gaugeSub', fmt(d.totalAprov)+' de '+fmt(META_ANUAL));
-
-  // Monthly gauge (last month)
-  const mkeys = Object.keys(d.monthly).sort();
-  const lastVal = mkeys.length ? d.monthly[mkeys[mkeys.length-1]] : 0;
-  const lastLab = mkeys.length ? MESES_PT[+mkeys[mkeys.length-1].split('-')[1]-1] : '—';
-  const pctMesGauge = lastVal / META_MENSAL;
-  charts.gaugeMes = makeGauge('chartGaugeMes', pctMesGauge, 'gaugeMesPct', 'gaugeMesSub');
-  setText('gaugeMesPct', (pctMesGauge*100).toFixed(1)+'%');
-  setText('gaugeMesSub', lastLab+': '+fmt(lastVal)+' de '+fmt(META_MENSAL));
-
 
   // SPEEDOMETERS
   const pctAnualGauge = d.totalAprov / META_ANUAL;
