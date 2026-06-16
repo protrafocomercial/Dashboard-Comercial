@@ -269,7 +269,7 @@ const setText = (id,t) => { const e=document.getElementById(id); if(e) e.textCon
 function toDate(v) {
   if (!v) return null;
   if (v instanceof Date) return v;
-  if (typeof v === "number") { const d=new Date(Math.round((v-25569)*864e5)); return isNaN(d)?null:d; }
+  if (typeof v === "number") { return new Date(Date.UTC(0,0,Math.round(v)-1)); }
   const d = new Date(v); return isNaN(d)?null:d;
 }
 
@@ -303,7 +303,7 @@ function parseWorkbook(wb) {
     if (status==="APROVADA") {
       totalAprov+=valor; countAprov++;
       if (cliente) clientMap[cliente]=(clientMap[cliente]||0)+valor;
-      if (dt) { const k=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}`; monthly[k]=(monthly[k]||0)+valor; }
+      if (dt) { const k=`${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,"0")}`; monthly[k]=(monthly[k]||0)+valor; }
     } else if (status==="EM ABERTO")  { totalAberto+=valor; countAberto++; }
     else if  (status==="NEGOCIAÇÃO")  {
       totalNeg+=valor; countNeg++;
