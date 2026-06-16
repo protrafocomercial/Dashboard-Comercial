@@ -98,6 +98,27 @@ canvas { width: 100% !important; }
 .neg-total span { background: #f59e0b22; border: 1px solid #f59e0b44; color: #f59e0b; padding: 4px 14px; border-radius: 8px; font-weight: 700; }
 
 
+
+/* GAUGE */
+.gauge-wrap { position: relative; width: 100%; }
+.gauge-center {
+  position: absolute; bottom: 18px; width: 100%; text-align: center;
+  pointer-events: none;
+}
+.gauge-pct  { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1; }
+.gauge-sub  { font-size: 0.7rem; color: #718096; margin-top: 3px; }
+.gauge-vals { display: flex; justify-content: space-between; font-size: 0.68rem; color: #4a5568; margin-top: 4px; padding: 0 8px; }
+
+
+/* GAUGE */
+.gauge-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+.gauge-center-text {
+  position: absolute; bottom: 18%; width: 100%; text-align: center; pointer-events: none;
+}
+.gauge-pct  { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1; }
+.gauge-sub  { font-size: 0.7rem; color: #718096; margin-top: 3px; }
+.gauge-vals { display: flex; justify-content: space-between; width: 100%; margin-top: 4px; font-size: 0.68rem; color: #4a5568; }
+
 /* PROGRESS BAR */
 .progress-wrap { margin-top: 8px; background: #2d3748; border-radius: 4px; height: 6px; overflow: hidden; }
 .progress-bar  { height: 6px; border-radius: 4px; transition: width .6s ease; }
@@ -181,14 +202,29 @@ footer { text-align: center; color: #2d3748; font-size: 0.65rem; padding: 16px; 
   </div>
 
   <!-- CHARTS ROW 2 -->
-  <div class="charts-bottom">
+  <!-- GAUGE META ANUAL -->
+  <div style="display:grid;grid-template-columns:1fr 2fr;gap:18px;margin-bottom:18px;">
     <div class="card">
-      <div class="card-title"><div class="dot"></div> Top 5 Clientes — Valor Aprovado</div>
-      <canvas id="chartClientes" height="220"></canvas>
+      <div class="card-title"><div class="dot" style="background:#f59e0b"></div> Velocímetro — Meta Anual R$ 24M</div>
+      <div class="gauge-wrap">
+        <canvas id="chartGauge" height="180"></canvas>
+        <div class="gauge-center-text">
+          <div class="gauge-pct" id="gaugePct">—</div>
+          <div class="gauge-sub" id="gaugeSub">da Meta Anual</div>
+        </div>
+        <div class="gauge-vals"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
     </div>
     <div class="card">
       <div class="card-title"><div class="dot"></div> Acumulado Mensal vs. Meta (R$ 2M/mês)</div>
       <canvas id="chartMeta" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="charts-bottom" style="grid-template-columns:1fr;">
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Top 5 Clientes — Valor Aprovado</div>
+      <canvas id="chartClientes" height="160"></canvas>
     </div>
   </div>
 
@@ -254,7 +290,80 @@ const G = "#2d3748", T = "#718096";
 
 Chart.defaults.font.family = '"Segoe UI", system-ui, sans-serif';
 Chart.defaults.color = T;
+
+// ── GAUGE NEEDLE PLUGIN ───────────────────────────────────────
+const gaugeNeedlePlugin = {
+  id: 'gaugeNeedle',
+  afterDraw(chart) {
+    if (!chart.config.options._isGauge) return;
+    const { ctx } = chart;
+    const meta = chart.getDatasetMeta(0);
+    if (!meta.data.length) return;
+    const arc = meta.data[0];
+    const cx = arc.x, cy = arc.y;
+    const ir = arc.innerRadius, or = arc.outerRadius;
+    const pct = Math.min(1, chart.config.data.datasets[0]._pct || 0);
+    const angle = Math.PI + pct * Math.PI; // π (left) → 2π (right)
+    const len = ir + (or - ir) * 0.88;
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.6)';
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + len * Math.cos(angle), cy + len * Math.sin(angle));
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 7, 0, 2 * Math.PI);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fill();
+    ctx.restore();
+  }
+};
+
 Chart.register(ChartDataLabels);
+
+// ── GAUGE NEEDLE PLUGIN ───────────────────────────────────────
+const gaugeNeedlePlugin = {
+  id: 'gaugeNeedle',
+  afterDraw(chart) {
+    if (!chart.config.options._isGauge) return;
+    const { ctx } = chart;
+    const meta = chart.getDatasetMeta(0);
+    if (!meta.data.length) return;
+    const arc = meta.data[0];
+    const cx = arc.x, cy = arc.y;
+    const ir = arc.innerRadius, or = arc.outerRadius;
+    const pct = Math.min(1, chart.config.data.datasets[0]._needlePct || 0);
+    // angle: π (left) → 2π (right) going clockwise through top
+    const angle = Math.PI + pct * Math.PI;
+    const len = ir + (or - ir) * 0.82;
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.6)';
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + len * Math.cos(angle), cy + len * Math.sin(angle));
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 7, 0, 2 * Math.PI);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fill();
+    ctx.restore();
+  }
+};
+
+
+Chart.register(gaugeNeedlePlugin);
 
 // ── HELPERS ───────────────────────────────────────────────────
 const fmt = v => {
@@ -323,7 +432,7 @@ function parseWorkbook(wb) {
 
 // ── CHARTS ────────────────────────────────────────────────────
 let charts = {};
-function destroyAll() { Object.values(charts).forEach(c=>c&&c.destroy()); charts={}; }
+function destroyAll() { Object.values(charts).forEach(c=>{ if(c&&c.destroy) c.destroy(); }); charts={}; }
 
 function renderAll(d) {
   destroyAll();
@@ -357,6 +466,39 @@ function renderAll(d) {
   const pbM = document.getElementById("pbMes");
   if(pbM){ pbM.style.width=pctMes+"%"; pbM.className="progress-bar "+(pctMes>=100?"green":pctMes>=75?"yellow":"red"); }
 
+
+  // ── GAUGE CHARTS ─────────────────────────────────────────────
+  function makeGauge(id, pct, labelId, subId, realizado, meta) {
+    const p = Math.min(pct, 1);
+    const color = p >= 1 ? '#10b981' : p >= 0.75 ? '#f59e0b' : p >= 0.5 ? '#f97316' : '#c84b50';
+    return new Chart(document.getElementById(id), {
+      type: 'doughnut',
+      data: { datasets: [{ data:[90,45,45,180], backgroundColor:['#c84b5055','#f59e0b55','#10b98155','transparent'], borderWidth:0, _pct:p },
+                         { data:[p*180, (1-p)*180, 180], backgroundColor:[color,'#1e2536','transparent'], borderWidth:0, _pct:p }] },
+      options: {
+        _isGauge: true,
+        rotation: 180, circumference: 360, cutout: '68%',
+        plugins: { legend:{display:false}, datalabels:{display:false}, tooltip:{enabled:false} },
+        animation: { duration: 1200, easing: 'easeInOutQuart' }
+      }
+    });
+  }
+
+  // Annual gauge
+  const pctAnualGauge = d.totalAprov / META_ANUAL;
+  charts.gauge = makeGauge('chartGauge', pctAnualGauge, 'gaugePct', 'gaugeSub');
+  setText('gaugePct', (pctAnualGauge*100).toFixed(1)+'%');
+  setText('gaugeSub', fmt(d.totalAprov)+' de '+fmt(META_ANUAL));
+
+  // Monthly gauge (last month)
+  const mkeys = Object.keys(d.monthly).sort();
+  const lastVal = mkeys.length ? d.monthly[mkeys[mkeys.length-1]] : 0;
+  const lastLab = mkeys.length ? MESES_PT[+mkeys[mkeys.length-1].split('-')[1]-1] : '—';
+  const pctMesGauge = lastVal / META_MENSAL;
+  charts.gaugeMes = makeGauge('chartGaugeMes', pctMesGauge, 'gaugeMesPct', 'gaugeMesSub');
+  setText('gaugeMesPct', (pctMesGauge*100).toFixed(1)+'%');
+  setText('gaugeMesSub', lastLab+': '+fmt(lastVal)+' de '+fmt(META_MENSAL));
+
   // MENSAL
   const months  = Object.keys(d.monthly).sort();
   const labMes  = months.map(k=>{ const[y,m]=k.split("-"); return MESES_PT[+m-1]+(y!=="2026"?" "+y.slice(2):""); });
@@ -382,6 +524,45 @@ function renderAll(d) {
       }
     }
   });
+
+  // GAUGE META ANUAL
+  const pctMeta = d.totalAprov / META_ANUAL;
+  const pctClamped = Math.min(pctMeta, 1);
+  const gaugeColor = pctClamped >= 1 ? '#10b981' : pctClamped >= 0.75 ? '#f59e0b' : pctClamped >= 0.5 ? '#f97316' : '#c84b50';
+
+  charts.gauge = new Chart(document.getElementById("chartGauge"), {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [90, 45, 45, 180],
+        backgroundColor: ['#c84b5066','#f59e0b55','#10b98155','transparent'],
+        borderWidth: 0,
+        borderColor: 'transparent',
+        _needlePct: pctClamped
+      }, {
+        // filled arc overlay
+        data: [pctClamped * 180, (1 - pctClamped) * 180, 180],
+        backgroundColor: [gaugeColor, '#1e2536', 'transparent'],
+        borderWidth: 0,
+        borderColor: 'transparent',
+        _skip: true
+      }]
+    },
+    options: {
+      _isGauge: true,
+      rotation: 180,
+      circumference: 360,
+      cutout: '65%',
+      plugins: {
+        legend: { display: false },
+        datalabels: { display: false },
+        tooltip: { enabled: false }
+      },
+      animation: { duration: 1000 }
+    }
+  });
+  setText("gaugePct", (pctMeta * 100).toFixed(1) + "%");
+  setText("gaugeSub", fmt(d.totalAprov) + " de " + fmt(META_ANUAL));
 
   // META
   const acum    = valMes.reduce((a,v,i)=>{a.push((a[i-1]||0)+v);return a;},[]);
