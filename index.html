@@ -144,6 +144,9 @@ main{width:100%;max-width:none;margin:0;padding:22px 24px 24px}.page-heading{dis
 @media(max-width:420px){.kpi-grid{gap:10px}.kpi{padding:13px;min-height:160px}.kpi-value{font-size:1.3rem}.kpi-sub{font-size:.65rem}.kpi.navy>div:last-child{display:block}.kpi.navy #kpiProjecao{text-align:left}.goal-result span{font-size:.68rem}}
 
 .goal-gauge{width:100%!important;max-width:400px;height:auto!important;display:block;margin:12px auto 0}.goal-card{background:#fff;padding:16px 20px 14px}.goal-caption{text-align:center;font-size:.75rem;color:#627188;margin-top:4px}.brazil-map{max-width:480px;margin:0 auto}#brazilMap{width:100%;height:auto;max-height:410px;display:block}.state-shape{fill:#f0f3f6;stroke:#fff;stroke-width:1.3;stroke-linejoin:round;cursor:pointer;transition:fill .15s}.state-shape:hover,.state-shape:focus{stroke:#bc4048;stroke-width:2.5;outline:none}.state-label{font:600 11px 'Segoe UI',sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.map-key{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.66rem;color:#627188;margin:8px 0}.map-zero{width:12px;height:12px;border:1px solid #dfe6ee;background:#f0f3f6}.map-gradient{width:90px;height:8px;background:linear-gradient(90deg,#dce8f4,#203d60);margin-left:8px}.map-info{min-height:37px;font-size:.77rem;text-align:center;color:#203d60;font-weight:600;padding:8px;background:#f7f9fc;border-radius:5px}.map-missing,.map-source{text-align:center;font-size:.66rem;color:#627188;margin:8px 0}.map-source a{color:#627188}.uf-ranking{border-top:1px solid #dfe6ee;margin-top:12px;padding-top:12px;font-size:.73rem;color:#627188}.uf-ranking summary{cursor:pointer;font-weight:600}.uf-ranking .breakdown{max-height:260px;margin-top:14px}
+
+.goal-gauge{max-width:430px;shape-rendering:geometricPrecision;text-rendering:optimizeLegibility}.goal-heading h2{font-size:.9rem}.goal-caption{font-size:.82rem}.card-title{font-size:.92rem}.legend-item{font-size:.75rem}.chart-frame{height:290px}.charts-top .chart-frame{height:280px}.state-label{font-size:12px}.map-info{font-size:.83rem}.sales-label{font-size:.82rem}.section-note{font-size:.79rem}.map-key{font-size:.74rem}.map-source,.map-missing{font-size:.72rem}
+@media(max-width:700px){.chart-frame,.charts-top .chart-frame{height:280px}.legend-item{font-size:.73rem}}
 </style>
 </head>
 <body>
@@ -212,8 +215,8 @@ main{width:100%;max-width:none;margin:0;padding:22px 24px 24px}.page-heading{dis
     </div>
   </div>
   <div class="goals-grid">
-    <section class="goal-card"><div class="goal-heading"><h2>Meta anual</h2><span>Meta de R$ 24 milhões</span></div><canvas id="gaugeAnual" class="goal-gauge" aria-label="Velocímetro da meta anual"></canvas><p class="goal-caption" id="annualSummary">—</p></section>
-    <section class="goal-card"><div class="goal-heading"><h2>Meta mensal <span id="goalMonth"></span></h2><span>Meta de R$ 2 milhões</span></div><canvas id="gaugeMensal" class="goal-gauge" aria-label="Velocímetro da meta mensal"></canvas><p class="goal-caption" id="monthlySummary">—</p></section>
+    <section class="goal-card"><div class="goal-heading"><h2>Meta anual</h2><span>Meta de R$ 24 milhões</span></div><svg id="gaugeAnual" class="goal-gauge" viewBox="0 0 480 250" role="img" aria-label="Velocímetro da meta anual"></svg><p class="goal-caption" id="annualSummary">—</p></section>
+    <section class="goal-card"><div class="goal-heading"><h2>Meta mensal <span id="goalMonth"></span></h2><span>Meta de R$ 2 milhões</span></div><svg id="gaugeMensal" class="goal-gauge" viewBox="0 0 480 250" role="img" aria-label="Velocímetro da meta mensal"></svg><p class="goal-caption" id="monthlySummary">—</p></section>
   </div>
   <!-- CHARTS ROW 1 -->
   <div class="charts-top">
@@ -319,6 +322,10 @@ const G = "#e8edf3", T = "#607086";
 
 Chart.defaults.font.family = '"Segoe UI", system-ui, sans-serif';
 Chart.defaults.color = T;
+Chart.defaults.devicePixelRatio = Math.max(3,window.devicePixelRatio||1);
+Chart.defaults.font.size = 12;
+Chart.defaults.plugins.tooltip.titleFont = {size:13};
+Chart.defaults.plugins.tooltip.bodyFont = {size:12};
 
 // ── GAUGE NEEDLE PLUGIN ───────────────────────────────────────
 const gaugeNeedlePlugin = {
@@ -429,24 +436,19 @@ function parseWorkbook(wb) {
 let charts = {};
 
 // ── SPEEDOMETER CANVAS ────────────────────────────────────────
-function drawGauge(canvasId,pct) {
-  const canvas=document.getElementById(canvasId);if(!canvas)return;
-  canvas.width=480;canvas.height=230;const ctx=canvas.getContext('2d'),cx=240,cy=190,r=151,p=Math.max(0,Math.min(1,pct));
-  ctx.clearRect(0,0,480,230);ctx.lineWidth=25;ctx.lineCap='butt';
-  for(const [from,to,color] of [[0,.5,'#f4c8cd'],[.5,.75,'#f5dcaa'],[.75,1,'#b6dfd2']]){
-    ctx.beginPath();ctx.strokeStyle=color;ctx.arc(cx,cy,r,Math.PI+from*Math.PI,Math.PI+to*Math.PI);ctx.stroke();
-  }
-  const color=pct>=1?'#287256':pct>=.75?'#977024':'#bc4048';
-  ctx.beginPath();ctx.arc(cx,cy,r,Math.PI,Math.PI+p*Math.PI);ctx.strokeStyle=color;ctx.lineWidth=9;ctx.stroke();
-  for(let i=0;i<=10;i++){
-    const a=Math.PI+i*Math.PI/10;ctx.beginPath();ctx.moveTo(cx+(r-19)*Math.cos(a),cy+(r-19)*Math.sin(a));ctx.lineTo(cx+(r+(i%5===0?18:13))*Math.cos(a),cy+(r+(i%5===0?18:13))*Math.sin(a));ctx.lineWidth=i%5===0?2:1;ctx.strokeStyle='#738297';ctx.stroke();
-  }
-  ctx.font='600 16px Segoe UI';ctx.fillStyle='#627188';ctx.textAlign='center';ctx.fillText('0%',55,220);ctx.fillText('50%',240,20);ctx.fillText('100%',425,220);
-  const angle=Math.PI+p*Math.PI;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+118*Math.cos(angle),cy+118*Math.sin(angle));ctx.strokeStyle='#203d60';ctx.lineWidth=4;ctx.lineCap='round';ctx.stroke();
-  ctx.beginPath();ctx.arc(cx,cy,9,0,Math.PI*2);ctx.fillStyle='#203d60';ctx.fill();ctx.beginPath();ctx.arc(cx,cy,3,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
-  ctx.fillStyle=color;ctx.font='700 42px Segoe UI';ctx.fillText((pct*100).toFixed(1).replace('.',',')+'%',240,134);
-  ctx.fillStyle='#627188';ctx.font='15px Segoe UI';ctx.fillText('da meta realizada',240,158);
-  canvas.setAttribute('aria-label','Meta realizada: '+(pct*100).toFixed(1).replace('.',',')+'%');
+function drawGauge(id,pct) {
+ const svg=document.getElementById(id);if(!svg)return;
+ const p=Math.max(0,Math.min(1,pct)),cx=240,cy=194,r=151;
+ const point=(t,rad=r)=>[cx+rad*Math.cos(Math.PI+t*Math.PI),cy+rad*Math.sin(Math.PI+t*Math.PI)];
+ const arc=(a,b)=>{const x=point(a),y=point(b);return 'M'+x.join(',')+' A'+r+','+r+' 0 0 1 '+y.join(',');};
+ const color=pct>=1?'#24735b':pct>=.75?'#b2802d':'#b9434d';
+ let content='<title>'+((pct*100).toFixed(1).replace('.',','))+'% da meta realizada</title>';
+ for(const [a,b,c] of [[0,.5,'#c85b65'],[.5,.75,'#dab05e'],[.75,1,'#3d9c7f']])content+='<path d="'+arc(a,b)+'" fill="none" stroke="'+c+'" stroke-width="25"/>';
+ for(let i=0;i<=10;i++){const a=point(i/10,r-20),b=point(i/10,r+14);content+='<path d="M'+a.join(',')+' L'+b.join(',')+'" stroke="'+(i%5?'#fff':'#41556d')+'" stroke-width="'+(i%5?1.2:2)+'"/>';}
+ const tip=point(p,126),angle=Math.PI+p*Math.PI,side=[Math.cos(angle+Math.PI/2)*5,Math.sin(angle+Math.PI/2)*5];
+ content+='<path d="M'+(cx+side[0])+','+(cy+side[1])+' L'+tip.join(',')+' L'+(cx-side[0])+','+(cy-side[1])+' Z" fill="#203d60"/><circle cx="240" cy="194" r="10" fill="#203d60"/><circle cx="240" cy="194" r="4" fill="#fff"/>';
+ content+='<g font-family="Segoe UI,Arial,sans-serif" text-anchor="middle"><text x="240" y="129" font-size="43" font-weight="700" fill="'+color+'">'+(pct*100).toFixed(1).replace('.',',')+'%</text><text x="240" y="153" font-size="16" fill="#607086">da meta realizada</text><g font-size="16" fill="#607086" font-weight="600"><text x="61" y="232">0%</text><text x="240" y="24">50%</text><text x="419" y="232">100%</text></g></g>';
+ svg.innerHTML=content;svg.setAttribute('aria-label','Meta realizada: '+(pct*100).toFixed(1).replace('.',',')+'%');
 }
 
 function destroyAll() { Object.values(charts).forEach(c=>{ if(c&&c.destroy) c.destroy(); }); charts={}; }
@@ -536,15 +538,15 @@ function renderAll(d) {
     type:"bar",
     data:{ labels:labMes, datasets:[{
       label:"Valor Aprovado", data:valMes,
-      backgroundColor: ctx=>{ const g=ctx.chart.ctx.createLinearGradient(0,0,0,260); g.addColorStop(0,"#c84b50cc"); g.addColorStop(1,"#c84b5022"); return g; },
-      borderColor:"#c84b50", borderWidth:2, borderRadius:6, borderSkipped:false
+      backgroundColor: ctx=>{ const g=ctx.chart.ctx.createLinearGradient(0,0,0,260); g.addColorStop(0,"#c84b50e0"); g.addColorStop(1,"#c84b5080"); return g; },
+      borderColor:"#bc4048", borderWidth:1, borderRadius:5, borderSkipped:false
     }]},
     options:{
-      responsive:true, maintainAspectRatio:false, layout:{padding:{top:26}},
+      responsive:true, maintainAspectRatio:false, layout:{padding:{top:30,right:12}},
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>" "+fmtFull(c.parsed.y)}},
-        datalabels:{anchor:"end",align:"end",color:"#24364b",font:{size:9,weight:"700"},formatter:v=>v>0?fmt(v):"",offset:2}
+        datalabels:{anchor:"end",align:"end",color:"#24364b",font:{size:11,weight:"600"},formatter:v=>v>0?fmt(v):"",offset:2}
       },
       scales:{
         x:{grid:{color:G},ticks:{color:T}},
@@ -561,7 +563,7 @@ function renderAll(d) {
     data:{labels:labMes, datasets:[
       { label:"Realizado Acumulado", data:acum.map((v,i)=>i<=months.findLastIndex(k=>d.monthly[k]>0)?v:null), borderColor:"#10b981", backgroundColor:"#10b98122",
         fill:true, tension:0.4, pointBackgroundColor:"#10b981", pointRadius:5, borderWidth:2.5,
-        datalabels:{align:"top",offset:4,color:"#10b981",font:{size:9,weight:"700"},formatter:v=>fmt(v)} },
+        datalabels:{align:"top",offset:4,color:"#24735b",font:{size:11,weight:"600"},formatter:v=>fmt(v)} },
       { label:"Meta (R$ 2M/mês)", data:metaAcc, borderColor:"#f59e0b", backgroundColor:"transparent",
         borderDash:[6,4], tension:0, pointBackgroundColor:"#f59e0b", pointRadius:4, borderWidth:2,
         datalabels:{display:false} }
@@ -569,7 +571,7 @@ function renderAll(d) {
     options:{
       responsive:true, maintainAspectRatio:false, layout:{padding:{top:22,right:36,left:12}},
       plugins:{
-        legend:{labels:{color:T,boxWidth:12,font:{size:11}}},
+        legend:{labels:{color:T,boxWidth:12,font:{size:12}}},
         tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmtFull(c.parsed.y)}`}},
         datalabels:{display:true}
       },
@@ -592,7 +594,7 @@ function renderAll(d) {
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} props (${fmtFull(stValues[c.dataIndex])})`}},
-        datalabels:{color:"#fff",font:{size:10,weight:"700"},
+        datalabels:{color:"#fff",font:{size:12,weight:"600"},
           formatter:(v)=>{ const p=Math.round(v/total*100); return p>=5?p+"%":""; },
           textShadowColor:"rgba(0,0,0,.6)",textShadowBlur:4}
       }
@@ -615,11 +617,11 @@ function renderAll(d) {
     data:{labels:cliLabels, datasets:[{label:"Valor Aprovado",data:cliVals,
       backgroundColor:cliCol,borderColor:cliBrd,borderWidth:2,borderRadius:6,borderSkipped:false}]},
     options:{
-      indexAxis:"y", responsive:true, maintainAspectRatio:false, layout:{padding:{right:18}},
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, layout:{padding:{right:54}},
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>" "+fmtFull(c.parsed.x)}},
-        datalabels:{anchor:"end",align:"end",color:"#24364b",font:{size:10,weight:"700"},formatter:v=>fmt(v),offset:4}
+        datalabels:{anchor:"end",align:"end",color:"#24364b",font:{size:12,weight:"600"},formatter:v=>fmt(v),offset:4}
       },
       scales:{
         x:{grid:{color:G},ticks:{color:T,callback:v=>fmt(v)}},
