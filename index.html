@@ -147,6 +147,27 @@ main{width:100%;max-width:none;margin:0;padding:22px 24px 24px}.page-heading{dis
 
 .goal-gauge{max-width:430px;shape-rendering:geometricPrecision;text-rendering:optimizeLegibility}.goal-heading h2{font-size:.9rem}.goal-caption{font-size:.82rem}.card-title{font-size:.92rem}.legend-item{font-size:.75rem}.chart-frame{height:290px}.charts-top .chart-frame{height:280px}.state-label{font-size:12px}.map-info{font-size:.83rem}.sales-label{font-size:.82rem}.section-note{font-size:.79rem}.map-key{font-size:.74rem}.map-source,.map-missing{font-size:.72rem}
 @media(max-width:700px){.chart-frame,.charts-top .chart-frame{height:280px}.legend-item{font-size:.73rem}}
+/* Relatório: impressão nativa mantém textos, mapa e metas vetoriais. */
+@page { size:A4 landscape; margin:12mm; }
+@media print {
+  * { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+  body { background:white!important; color:#203b60!important; }
+  header { position:static!important; padding:0 0 12px!important; }
+  header button,.upload-zone,#statusBar,.uf-ranking summary,.data-note summary,footer { display:none!important; }
+  main { max-width:none!important; width:100%!important; padding:12px 0!important; }
+  .kpi-grid { grid-template-columns:repeat(4,1fr)!important; gap:12px!important; }
+  .goal-grid,.goals-grid,.charts-top,.charts-bottom { grid-template-columns:1fr 1fr!important; gap:14px!important; }
+  .card,.kpi,.goal-card,.neg-card { box-shadow:none!important; break-inside:avoid; border-radius:6px!important; }
+  .charts-top,.charts-bottom { break-before:page; }
+  .chart-frame { height:260px!important; }
+  .table-scroll,.breakdown,.neg-card { max-height:none!important; overflow:visible!important; }
+  .market-card { break-before:page; break-inside:auto!important; }
+  table { width:100%!important; } thead { display:table-header-group; }
+  tr,.sales-row { break-inside:avoid; } th { position:static!important; }
+  .charts-bottom:has(#ufSales) { display:block!important; } .charts-bottom:has(#ufSales) > .card { break-before:page; break-inside:auto!important; margin-bottom:16px; } .brazil-map { max-height:none!important; } #brazilMap { max-height:300px!important; } .uf-ranking { break-before:page; }
+  .print-meta { display:block!important; margin:8px 0 16px; font-size:11px; color:#607086; }
+}
+.print-meta { display:none; }
 </style>
 </head>
 <body>
@@ -161,8 +182,8 @@ main{width:100%;max-width:none;margin:0;padding:22px 24px 24px}.page-heading{dis
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
     <div class="badge" id="headerBadge">2026 &bull; Jan &ndash; Dez</div>
-    <button id="btnDownload" onclick="downloadUpdatedHTML()" style="display:none;background:#10b981;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
-      Baixar dashboard
+    <button id="btnDownload" onclick="downloadDashboardPDF()" style="display:none;background:#10b981;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+      Baixar relatório PDF
     </button>
   </div>
 </header>
@@ -710,18 +731,25 @@ const INIT = {"monthly":{"2026-01":1815687.9,"2026-02":2229540.88,"2026-03":3573
 
 
 // ── DOWNLOAD HTML ATUALIZADO ──────────────────────────────────
-function downloadUpdatedHTML() {
-  const serialized=JSON.stringify(window._lastData).replace(/</g,'\\u003c');
-  const updated=document.documentElement.outerHTML.replace(/const INIT = \{[\s\S]*?\};/,()=> 'const INIT = '+serialized+';');
-  const url=URL.createObjectURL(new Blob([updated],{type:'text/html;charset=utf-8'}));
-  const a=document.createElement('a');a.href=url;a.download='dashboard-propostas-2026.html';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+function downloadDashboardPDF() {
+  document.querySelectorAll('details').forEach(el=>{el.dataset.printWasOpen=el.open?'1':'0';el.open=true;});
+  let stamp=document.getElementById('printMeta');
+  if(!stamp){stamp=document.createElement('p');stamp.id='printMeta';stamp.className='print-meta';document.querySelector('main').prepend(stamp);}
+  stamp.textContent='Relatório comercial · Gerado em '+new Date().toLocaleString('pt-BR')+' · '+document.getElementById('statusBar').textContent;
+  document.title='Relatório Comercial ProTrafo 2026';
+  Object.values(charts).forEach(chart=>{chart.stop();chart.update('none');});
+  window.print();
 }
+window.addEventListener('afterprint',()=>{
+  document.querySelectorAll('details[data-print-was-open]').forEach(el=>{el.open=el.dataset.printWasOpen==='1';delete el.dataset.printWasOpen;});
+});
 
 // Auto-load from GitHub on startup
 loadFromGitHub();
 </script>
 </body>
 </html>
+
 
 
 
