@@ -123,6 +123,25 @@ footer { text-align: center; color: #2d3748; font-size: 0.65rem; padding: 16px; 
 body{background:#101722;color:#e8edf4}header{background:#182333;border-bottom:3px solid #ce5358;padding:24px 32px}header h1{font-size:1.5rem;letter-spacing:-.4px}main{max-width:1560px;padding-top:26px}.kpi-grid{gap:18px}.kpi,.card,.neg-card{background:#192536;border-color:#304155;border-radius:16px;box-shadow:0 8px 24px #0002}.kpi{padding:22px}.kpi-label{color:#b1bfd0;font-size:.74rem}.kpi-value{font-size:1.85rem}.kpi-sub{color:#9aaec4;line-height:1.5}.card-title{color:#e7eef7;font-size:.9rem;text-transform:none;letter-spacing:0}.card{padding:24px}.section-note{color:#acbdcf;font-size:.8rem;line-height:1.6;margin-bottom:18px}.sales-row{margin:20px 0}.sales-label{display:flex;justify-content:space-between;gap:16px;font-size:.85rem}.sales-label span{white-space:nowrap}.sales-label small{color:#b0c0d2;margin-left:8px}.sales-track{height:8px;background:#304155;border-radius:6px;margin-top:9px;overflow:hidden}.sales-track>div{height:100%;background:linear-gradient(90deg,#ce5358,#ed989b);border-radius:6px}.table-scroll{overflow:auto;max-height:520px}.neg-table{font-size:.85rem}.neg-table thead th{color:#b0c0d2;padding:12px 16px;white-space:nowrap;background:#192536;position:sticky;top:0}.neg-table tbody td{padding:13px 16px}.neg-table tfoot td{padding:16px;font-weight:700;border-top:2px solid #43536a}.neg-table .share{color:#89ddc1;font-weight:700;text-align:right}.market-card{margin-bottom:24px}.charts-bottom{align-items:start}.upload-zone{border:1px solid #304155;background:#192536;padding:14px 22px}.upload-text span,.status-bar{color:#aabbce}.upload-icon,.kpi-icon{display:none}footer{color:#9aadc3}.neg-card{overflow:auto}button:focus-visible{outline:3px solid #f3babc;outline-offset:4px}
 @media(max-width:900px){.charts-top,.charts-bottom{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}header,main{padding:20px}.upload-zone{margin:16px 20px 0}.status-bar{margin-left:20px;margin-right:20px}.sales-label{flex-wrap:wrap}}
 @media(max-width:520px){.kpi-grid{grid-template-columns:1fr}.upload-zone{flex-wrap:wrap}.upload-btn{margin-left:0}.card{padding:18px}header h1{font-size:1.2rem}}
+
+/* Corporate light theme */
+:root{--navy:#203d60;--ink:#1f3044;--muted:#627188;--line:#dfe6ee;--brand:#bc4048}
+body{background:#fff;color:var(--ink);font-family:"Segoe UI",Arial,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:18px 24px;gap:16px;min-height:82px}
+header h1{color:var(--ink);font-size:1.2rem;letter-spacing:-.2px}header .subtitle{color:var(--muted);font-size:.75rem;margin-top:5px}header img{width:112px!important;object-fit:contain}
+.badge{background:#f1f5f9;border-color:#e2e8f0;color:var(--navy);font-size:.72rem}#btnDownload{background:var(--navy)!important;border-radius:6px!important;font-size:.75rem!important;font-weight:600!important;padding:10px 14px!important}
+.upload-zone{margin:16px 24px 0;background:#f7f9fc;border:1px solid var(--line);border-radius:8px;padding:12px 16px;gap:12px}.upload-text strong{color:var(--ink);font-size:.8rem}.upload-text span{color:var(--muted);font-size:.72rem}.upload-btn{background:var(--navy);border-radius:6px;padding:10px 16px;font-size:.75rem}.upload-zone:hover{background:#f2f5f9;border-color:#bccbdc}.upload-btn:hover{background:#2d537e}
+.status-bar{margin:7px 24px 0;font-size:.7rem;color:var(--muted)}.status-bar.ok{color:#287256}
+main{width:100%;max-width:none;margin:0;padding:22px 24px 24px}.page-heading{display:flex;align-items:end;justify-content:space-between;margin-bottom:18px}.eyebrow{font-size:.63rem;letter-spacing:1.4px;font-weight:700;color:var(--muted);margin-bottom:5px}.page-heading h2{font-size:1.3rem;letter-spacing:-.3px;color:var(--ink)}.period-label{font-size:.75rem;color:var(--muted)}
+.kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px}.kpi{background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 2px 5px #203d6008;padding:20px;min-height:168px}.kpi::before{height:3px}.kpi.red::before{background:var(--brand)}.kpi.green::before{background:#31816b}.kpi.yellow::before{background:#a87c29}.kpi.navy::before{background:var(--navy)}.kpi-label{color:var(--muted);font-size:.7rem;letter-spacing:.6px}.kpi-value{color:var(--ink);font-size:1.75rem;font-weight:700;margin-top:10px;letter-spacing:-.6px}.kpi-sub{color:var(--muted);font-size:.72rem;margin-top:8px}.kpi.navy>div:last-child{border-color:var(--line)!important;padding-top:9px!important;display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:8px}.kpi.navy>div:last-child .kpi-label{margin:0;color:var(--muted)!important;font-size:.64rem}.kpi.navy #kpiProjecao{color:var(--navy)!important;font-size:.95rem!important;text-align:right}.kpi.navy #kpiProjecaoSub{grid-column:1/-1;margin-top:3px;font-size:.65rem}
+.goals-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}.goal-card{border:1px solid var(--line);border-radius:9px;padding:16px 20px;background:#f9fbfd}.goal-heading,.goal-result{display:flex;align-items:center;justify-content:space-between;gap:12px}.goal-heading h2{font-size:.8rem;font-weight:600;color:var(--ink)}.goal-heading span{font-size:.7rem;color:var(--muted)}.goal-result{margin-top:12px}.goal-result strong{font-size:1.5rem;color:#287256;font-weight:700}.goal-result span{font-size:.73rem;color:var(--muted)}.goal-track{height:6px;background:#e4ebe9;margin-top:12px;border-radius:5px;overflow:hidden}.goal-track>div{height:100%;background:#31816b;border-radius:5px}
+.charts-top{grid-template-columns:minmax(0,1.8fr) minmax(0,1fr);gap:16px;align-items:stretch;margin-bottom:16px}.charts-bottom{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start;margin-bottom:16px}.card,.neg-card{background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 2px 5px #203d6008;padding:20px;min-width:0}.card-title{font-size:.83rem;font-weight:600;color:var(--ink);text-transform:none;letter-spacing:0;margin-bottom:18px}.card-title .dot{width:5px;height:5px;background:var(--brand)}.chart-frame{height:270px;position:relative;width:100%;min-width:0}.charts-top .chart-frame{height:250px}#chartStatus{max-width:100%;margin:auto}.legend{gap:10px;justify-content:center;margin-top:14px}.legend-item{color:var(--muted);font-size:.65rem}.legend-dot{width:7px;height:7px}.section-note{color:var(--muted);font-size:.74rem;margin-top:-8px;margin-bottom:14px}
+.sales-row{margin:15px 0}.sales-label{font-size:.75rem;gap:12px;color:var(--ink)}.sales-label strong{font-weight:600}.sales-label span{font-variant-numeric:tabular-nums}.sales-label small{color:var(--muted);font-size:.68rem}.sales-track{height:6px;background:#edf1f5;margin-top:7px}.sales-track>div{background:var(--navy)}.breakdown{max-height:420px;overflow:auto;padding-right:8px;scrollbar-width:thin}
+.neg-card{margin-bottom:16px}.neg-table{font-size:.76rem}.neg-table thead th{background:#f7f9fc;color:var(--muted);padding:12px;font-size:.64rem;border-bottom:1px solid var(--line);letter-spacing:.4px}.neg-table tbody td{color:#43546a;border-bottom:1px solid #edf1f5;padding:12px;line-height:1.45}.neg-table tbody td:first-child{color:var(--muted)}.neg-table tbody td.cli{color:var(--ink);font-weight:600}.neg-table tbody td.esc{color:var(--muted);font-size:.73rem}.neg-table tbody td.val{color:var(--navy)}.neg-table tbody tr:hover td{background:#f7f9fc}.neg-total span{background:#f4f7fa;color:var(--navy);border-color:var(--line);font-size:.75rem;border-radius:6px}.neg-table .share{color:#287256}.neg-table tfoot td{color:var(--ink);border-color:var(--line);font-size:.76rem}.market-card{margin-bottom:16px}.table-scroll{max-height:440px}.data-note{font-size:.7rem;line-height:1.7;color:var(--muted);padding:12px 0;border-top:1px solid var(--line)}.data-note summary{cursor:pointer;font-weight:600}.data-note p{padding-top:6px}footer{color:var(--muted);font-size:.67rem;padding:12px 24px;background:#f9fbfd;border-top:1px solid var(--line)}
+@media(min-width:1600px){main{padding:24px 32px}.chart-frame{height:300px}.charts-top .chart-frame{height:290px}}
+@media(max-width:1000px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi{min-height:155px}.charts-top{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}}
+@media(max-width:700px){header{padding:16px;min-height:auto}header h1{font-size:1rem}.upload-zone{margin:12px 16px 0}.status-bar{margin-left:16px;margin-right:16px}main{padding:18px 16px}.goals-grid,.charts-top,.charts-bottom{grid-template-columns:1fr}.goal-heading,.goal-result{flex-wrap:wrap}.chart-frame,.charts-top .chart-frame{height:260px}.page-heading h2{font-size:1.15rem}.kpi{padding:16px;min-height:150px}.kpi-value{font-size:1.5rem}.period-label{display:none}.card,.neg-card{padding:16px}.sales-label{flex-wrap:wrap}.breakdown{max-height:none}}
+@media(max-width:420px){.kpi-grid{gap:10px}.kpi{padding:13px;min-height:160px}.kpi-value{font-size:1.3rem}.kpi-sub{font-size:.65rem}.kpi.navy>div:last-child{display:block}.kpi.navy #kpiProjecao{text-align:left}.goal-result span{font-size:.68rem}}
 </style>
 </head>
 <body>
@@ -138,7 +157,7 @@ body{background:#101722;color:#e8edf4}header{background:#182333;border-bottom:3p
   <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
     <div class="badge" id="headerBadge">2026 &bull; Jan &ndash; Dez</div>
     <button id="btnDownload" onclick="downloadUpdatedHTML()" style="display:none;background:#10b981;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
-      ⬇ Baixar HTML atualizado
+      Baixar dashboard
     </button>
   </div>
 </header>
@@ -154,7 +173,7 @@ body{background:#101722;color:#e8edf4}header{background:#182333;border-bottom:3p
 </div>
 <div class="status-bar" id="statusBar">Usando dados da última planilha carregada.</div>
 
-<main><p class="section-note" id="dataQuality"></p>
+<main><div class="page-heading"><div><p class="eyebrow">PROTRAFO · COMERCIAL</p><h2>Visão geral de vendas</h2></div><span class="period-label">Exercício 2026</span></div>
 
   <!-- KPIs -->
   <div class="kpi-grid">
@@ -184,31 +203,25 @@ body{background:#101722;color:#e8edf4}header{background:#182333;border-bottom:3p
         <div class="kpi-sub" id="kpiConvSub">—</div>
       </div>
       <div style="border-top:1px solid #2d3748;padding-top:10px;">
-        <div class="kpi-label" style="color:#c84b50;">🎯 Projeção Anual</div>
+        <div class="kpi-label" style="color:#c84b50;">Projeção anual</div>
         <div style="font-size:1.2rem;font-weight:800;color:#f08a8d;line-height:1.2;" id="kpiProjecao">—</div>
         <div class="kpi-sub" id="kpiProjecaoSub">base: ritmo atual</div>
       </div>
     </div>
-    <div class="kpi" style="align-items:center;justify-content:center;text-align:center;padding:12px 8px;">
-      <div class="kpi-label" style="margin-bottom:2px;">⚡ Meta Anual — R$ 24M</div>
-      <canvas id="gaugeAnual" style="width:100%;height:auto;display:block;margin:0 auto;max-height:130px;"></canvas>
-      <div id="gaugeAnualLabel" style="font-size:0.68rem;color:#a0aec0;margin-top:2px;">—</div>
-    </div>
-    <div class="kpi" style="align-items:center;justify-content:center;text-align:center;padding:12px 8px;">
-      <div class="kpi-label" style="margin-bottom:2px;">📅 Meta Mensal — R$ 2M</div>
-      <canvas id="gaugeMensal" style="width:100%;height:auto;display:block;margin:0 auto;max-height:130px;"></canvas>
-      <div id="gaugeMensalLabel" style="font-size:0.68rem;color:#a0aec0;margin-top:2px;">—</div>
-    </div>
+  </div>
+  <div class="goals-grid">
+    <section class="goal-card"><div class="goal-heading"><h2>Meta anual</h2><span>Meta de R$ 24 milhões</span></div><div class="goal-result"><strong id="annualPct">—</strong><span id="annualSummary">—</span></div><div class="goal-track"><div id="annualProgress"></div></div></section>
+    <section class="goal-card"><div class="goal-heading"><h2>Meta mensal <span id="goalMonth"></span></h2><span>Meta de R$ 2 milhões</span></div><div class="goal-result"><strong id="monthlyPct">—</strong><span id="monthlySummary">—</span></div><div class="goal-track"><div id="monthlyProgress"></div></div></section>
   </div>
   <!-- CHARTS ROW 1 -->
   <div class="charts-top">
     <div class="card">
       <div class="card-title"><div class="dot"></div> Vendas Mensais — Valor Aprovado (R$)</div>
-      <canvas id="chartMensal" height="200"></canvas>
+      <div class="chart-frame"><canvas id="chartMensal"></canvas></div>
     </div>
     <div class="card">
       <div class="card-title"><div class="dot"></div> Status das Propostas</div>
-      <canvas id="chartStatus" height="190"></canvas>
+      <div class="chart-frame"><canvas id="chartStatus"></canvas></div>
       <div class="legend" id="statusLegend"></div>
     </div>
   </div>
@@ -217,11 +230,11 @@ body{background:#101722;color:#e8edf4}header{background:#182333;border-bottom:3p
   <div class="charts-bottom">
     <div class="card">
       <div class="card-title"><div class="dot"></div> Top 5 Clientes — Valor Aprovado</div>
-      <canvas id="chartClientes" height="220"></canvas>
+      <div class="chart-frame"><canvas id="chartClientes"></canvas></div>
     </div>
     <div class="card">
       <div class="card-title"><div class="dot"></div> Acumulado Mensal vs. Meta (R$ 2M/mês)</div>
-      <canvas id="chartMeta" height="220"></canvas>
+      <div class="chart-frame"><canvas id="chartMeta"></canvas></div>
     </div>
   </div>
 
@@ -247,7 +260,7 @@ body{background:#101722;color:#e8edf4}header{background:#182333;border-bottom:3p
     <section class="card"><h2 class="card-title">Vendas por família de serviço</h2><p class="section-note">Distribuição do valor aprovado por serviço</p><div class="breakdown" id="familySales"></div></section>
   </div>
   <section class="card market-card"><h2 class="card-title">Market share por cliente</h2><p class="section-note">Participação de cada cliente no total de vendas aprovadas da ProTrafo.</p><div class="table-scroll"><table class="neg-table"><thead><tr><th>Cliente</th><th>Propostas aprovadas</th><th>Vendas aprovadas</th><th>Participação</th></tr></thead><tbody id="marketBody"></tbody><tfoot><tr><td>Total</td><td id="marketCount"></td><td id="marketTotal"></td><td id="marketPct"></td></tr></tfoot></table></div></section>
-</main>
+<details class="data-note"><summary>Observações da base de dados</summary><p id="dataQuality"></p></details></main>
 
 <footer id="footerTxt">Dashboard gerado automaticamente — carregue a planilha para atualizar os dados.</footer>
 
@@ -300,7 +313,7 @@ const MESES_PT = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","N
 const STATUS_CORES = {
   "APROVADA":"#10b981","EM ABERTO":"#c84b50","NEGOCIAÇÃO":"#f59e0b","PERDIDA":"#6b7280","CANCELADA":"#374151"
 };
-const G = "#2d3748", T = "#718096";
+const G = "#e8edf3", T = "#607086";
 
 Chart.defaults.font.family = '"Segoe UI", system-ui, sans-serif';
 Chart.defaults.color = T;
@@ -579,8 +592,12 @@ function renderAll(d) {
   const lastMVal = months3.length ? d.monthly[months3[months3.length-1]] : 0;
   const lastMLab = months3.length ? (()=>{ const[y,m]=months3[months3.length-1].split("-"); return MESES_PT[+m-1]; })() : "";
   const pctMensalGauge = lastMVal / META_MENSAL;
-  drawGauge("gaugeAnual",  pctAnualGauge,  fmt(d.totalAprov) + " / " + fmt(META_ANUAL), "gaugeAnualLabel");
-  drawGauge("gaugeMensal", pctMensalGauge, lastMLab + ": " + fmt(lastMVal) + " / " + fmt(META_MENSAL), "gaugeMensalLabel");
+  setText('annualPct',(pctAnualGauge*100).toFixed(1).replace('.',',')+'%');
+  setText('annualSummary',fmtFull(d.totalAprov)+' realizados');
+  document.getElementById('annualProgress').style.width=Math.min(100,pctAnualGauge*100)+'%';
+  setText('monthlyPct',(pctMensalGauge*100).toFixed(1).replace('.',',')+'%');
+  setText('goalMonth','· '+lastMLab);setText('monthlySummary',fmtFull(lastMVal)+' realizados');
+  document.getElementById('monthlyProgress').style.width=Math.min(100,pctMensalGauge*100)+'%';
 
   // MENSAL
   const months  = Object.keys(d.monthly).sort();
@@ -595,11 +612,11 @@ function renderAll(d) {
       borderColor:"#c84b50", borderWidth:2, borderRadius:6, borderSkipped:false
     }]},
     options:{
-      responsive:true, layout:{padding:{top:26}},
+      responsive:true, maintainAspectRatio:false, layout:{padding:{top:26}},
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>" "+fmtFull(c.parsed.y)}},
-        datalabels:{anchor:"end",align:"end",color:"#e2e8f0",font:{size:9,weight:"700"},formatter:v=>v>0?fmt(v):"",offset:2}
+        datalabels:{anchor:"end",align:"end",color:"#24364b",font:{size:9,weight:"700"},formatter:v=>v>0?fmt(v):"",offset:2}
       },
       scales:{
         x:{grid:{color:G},ticks:{color:T}},
@@ -622,7 +639,7 @@ function renderAll(d) {
         datalabels:{display:false} }
     ]},
     options:{
-      responsive:true, layout:{padding:{top:22}},
+      responsive:true, maintainAspectRatio:false, layout:{padding:{top:22}},
       plugins:{
         legend:{labels:{color:T,boxWidth:12,font:{size:11}}},
         tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmtFull(c.parsed.y)}`}},
@@ -641,9 +658,9 @@ function renderAll(d) {
   charts.status = new Chart(document.getElementById("chartStatus"),{
     type:"doughnut",
     data:{labels:stLabels.map(s=>s.charAt(0)+s.slice(1).toLowerCase()),
-          datasets:[{data:stCounts,backgroundColor:stColors,borderWidth:2,borderColor:"#1a1f2e",hoverOffset:8}]},
+          datasets:[{data:stCounts,backgroundColor:stColors,borderWidth:2,borderColor:"#ffffff",hoverOffset:8}]},
     options:{
-      responsive:true, cutout:"66%",
+      responsive:true, maintainAspectRatio:false, cutout:"66%",
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} props (${fmtFull(stValues[c.dataIndex])})`}},
@@ -663,22 +680,22 @@ function renderAll(d) {
   const top5      = Object.entries(d.clientMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
   const cliLabels = top5.map(([k])=>k);
   const cliVals   = top5.map(([,v])=>v);
-  const cliCol    = ["#c84b50cc","#d9636899","#a9303566","#8b1f2444","#6b101322"];
-  const cliBrd    = ["#c84b50","#d96368","#a93035","#8b1f24","#6b1013"];
+  const cliCol = ["#203d60","#355878","#4b7090","#6287a5","#7e9eb9"];
+  const cliBrd = cliCol;
   charts.clientes = new Chart(document.getElementById("chartClientes"),{
     type:"bar",
     data:{labels:cliLabels, datasets:[{label:"Valor Aprovado",data:cliVals,
       backgroundColor:cliCol,borderColor:cliBrd,borderWidth:2,borderRadius:6,borderSkipped:false}]},
     options:{
-      indexAxis:"y", responsive:true, layout:{padding:{right:18}},
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, layout:{padding:{right:18}},
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>" "+fmtFull(c.parsed.x)}},
-        datalabels:{anchor:"end",align:"end",color:"#e2e8f0",font:{size:10,weight:"700"},formatter:v=>fmt(v),offset:4}
+        datalabels:{anchor:"end",align:"end",color:"#24364b",font:{size:10,weight:"700"},formatter:v=>fmt(v),offset:4}
       },
       scales:{
         x:{grid:{color:G},ticks:{color:T,callback:v=>fmt(v)}},
-        y:{grid:{display:false},ticks:{color:"#e2e8f0",font:{weight:"600"}}}
+        y:{grid:{display:false},ticks:{color:"#24364b",font:{weight:"600"}}}
       }
     }
   });
